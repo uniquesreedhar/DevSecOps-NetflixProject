@@ -5,7 +5,7 @@ metadata:
   labels:
     app: netflix-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: netflix-app
