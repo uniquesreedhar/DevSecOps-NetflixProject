@@ -49,6 +49,16 @@ pipeline{
        //         sh "trivy fs . > trivyfs.txt"
        //     }
        // }
+        stage('Clean Docker') {
+            steps {
+                script {
+                    sh 'docker stop $(docker ps -a -q) || true'
+                    sh 'docker rm $(docker ps -a -q) || true'
+                    sh 'docker rmi $(docker images -q) || true'
+                }
+            }
+         }
+       
         stage("Docker Build & Push"){
             steps{
                 script{
