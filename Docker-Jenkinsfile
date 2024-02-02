@@ -52,11 +52,19 @@ pipeline{
         stage('Clean Docker') {
             steps {
                 script {
-                    sh 'docker stop $(docker ps -a -q) || true'
-                    sh 'docker rm $(docker ps -a -q) || true'
-                    sh 'docker rmi $(docker images -q) || true'
-                }
-            }
+                    def runningContainers = sh(script: 'docker ps -q', returnStdout: true).trim()
+            
+                   // Check if there are running containers
+                   if (runningContainers) {
+                   sh 'docker stop ${runningContainers} || true'
+                   sh 'docker rm ${runningContainers} || true'
+                   } else {
+                       echo 'No running Docker containers found. Skipping cleanup.'
+                   }
+
+                   sh 'docker rmi $(docker images -q) || true'
+                 }
+             }
          }
        
         stage("Docker Build & Push"){
