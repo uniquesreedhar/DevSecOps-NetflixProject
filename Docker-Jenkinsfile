@@ -52,6 +52,7 @@ pipeline{
         stage('Clean Docker') {
             steps {
                 script {
+                    sh 'npm cache clean --force' 
                     sh 'docker stop $(docker ps -a -q) || true'
                     sh 'docker rm $(docker ps -a -q) || true'
                     sh 'docker rmi $(docker images -q) || true'
